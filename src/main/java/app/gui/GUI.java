@@ -6,8 +6,10 @@ import entity.Grade;
 import use_case.*;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.lang.String;
+import com.formdev.flatlaf.FlatDarkLaf;
 
 public class GUI {
     public static void main(String[] args) {
@@ -25,8 +27,17 @@ public class GUI {
         LeaveTeamUseCase leaveTeamUseCase = config.leaveTeamUseCase();
         GetAverageGradeUseCase getAverageGradeUseCase = config.getAverageGradeUseCase();
 
+        FlatDarkLaf.setup();
+
         // this is the code that runs to set up our GUI
         SwingUtilities.invokeLater(() -> {
+            try {
+                UIManager.setLookAndFeel( new FlatDarkLaf() );
+            } catch( Exception ex ) {
+                System.err.println( "Failed to initialize LaF" );
+            }
+
+
             JFrame frame = new JFrame("Grade GUI App");
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setSize(850, 300);
@@ -83,6 +94,7 @@ public class GUI {
     private static JPanel createDefaultCard() {
         JPanel defaultCard = new JPanel();
         defaultCard.setLayout(new BorderLayout());
+        defaultCard.setBorder(createDefaultBorder());
 
         JLabel infoLabel = new JLabel("Welcome to the Grade App (GUI Version)!\n" +
                 "\t Using API TOKEN: " + MongoGradeDB.getApiToken());
@@ -95,6 +107,7 @@ public class GUI {
     private static JPanel createGetGradeCard(JFrame jFrame, GetGradeUseCase getGradeUseCase) {
         JPanel getGradeCard = new JPanel();
         getGradeCard.setLayout(new GridLayout(3, 2));
+        getGradeCard.setBorder(createDefaultBorder());
 
         JTextField utoridField = new JTextField(20);
         JTextField courseField = new JTextField(20);
@@ -128,6 +141,7 @@ public class GUI {
     private static JPanel createLogGradeCard(JFrame jFrame, LogGradeUseCase logGradeUseCase) {
         JPanel logGradeCard = new JPanel();
         logGradeCard.setLayout(new GridLayout(4, 2));
+        logGradeCard.setBorder(createDefaultBorder());
         JTextField courseField = new JTextField(20);
         JTextField gradeField = new JTextField(20);
         JButton logButton = new JButton("Log");
@@ -161,6 +175,7 @@ public class GUI {
 
     private static JPanel createFormTeamCard(JFrame jFrame, FormTeamUseCase formTeamUseCase) {
         JPanel theCard = new JPanel();
+        theCard.setBorder(createDefaultBorder());
         theCard.setLayout(new GridLayout(4, 2));
         JTextField nameField = new JTextField(20);
         JButton submitButton = new JButton("Submit");
@@ -189,6 +204,7 @@ public class GUI {
 
     private static JPanel createJoinTeamCard(JFrame jFrame, JoinTeamUseCase joinTeamUseCase) {
         JPanel theCard = new JPanel();
+        theCard.setBorder(createDefaultBorder());
         theCard.setLayout(new GridLayout(4, 2));
         JTextField nameField = new JTextField(20);
         JButton submitButton = new JButton("Submit");
@@ -218,6 +234,7 @@ public class GUI {
     private static JPanel createManageTeamCard(JFrame jFrame, LeaveTeamUseCase leaveTeamUseCase,
                                                GetAverageGradeUseCase getAverageGradeUseCase) {
         JPanel theCard = new JPanel();
+        theCard.setBorder(createDefaultBorder());
         theCard.setLayout(new GridLayout(4, 2));
         JTextField courseField = new JTextField(20);
         // make a separate line.
@@ -254,5 +271,9 @@ public class GUI {
 
 
         return theCard;
+    }
+
+    public static EmptyBorder createDefaultBorder() {
+        return new EmptyBorder(32, 32, 32, 32);
     }
 }
